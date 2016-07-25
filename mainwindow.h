@@ -39,15 +39,20 @@ private:
     QGraphicsRectItem *floor;
     QGraphicsTextItem *text;
 
-    QTimer * timer;
+    QTimer *timer;
+    QTimer *statusTimer;
 
     FF heightBetweenBallFloor;
 
     FF time_to_fall;
+    FF time_to_go_up;
+    FF height_till_top;
+    FF pixels_till_top;
 
     FF ball_1_gravity;
     FF ball_1_mass;
     FF ball_1_height;
+    FF ball_1_current_height;
     FF ball_1_velocityX = 0.0;
     FF ball_1_velocityY = 0.0;
     FF ball_1_COR;
@@ -57,6 +62,9 @@ private:
     FF ball_1_velocityYAfterImpact;
     FF ball_1_partialTimeElapsed = 0.0; // miliseconds
     FF ball_1_totalTimeElapsed;
+    bool isGoingToFall = false;
+    bool isGoingToBounce = false;
+    bool isMoving = false;
 
     FF ball_2_gravity;
     FF ball_2_mass;
@@ -79,7 +87,9 @@ public slots:
     void freeFalling(); // accelerating
     void bouncingUp(); // decelerating
 
+    void checkBallStatus();
     void disconnectFall();
+    void disconnectBounce();
 
 };
 
