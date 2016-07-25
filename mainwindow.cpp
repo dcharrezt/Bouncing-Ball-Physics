@@ -37,11 +37,12 @@ void MainWindow::drawScene()
     outlinePen.setWidth(0);
 
     floor = scene->addRect(0, 0, 320, 30, outlinePen, greenBrush);
-    floor->setFlag(QGraphicsItem::ItemIsMovable);
+    //floor->setFlag(QGraphicsItem::ItemIsMovable);
 
     // addEllipse(x,y,w,h,pen,brush)
     ball_1 = scene->addEllipse(rectBall_1, outlinePen, blueBrush);
     ball_1->setFlag(QGraphicsItem::ItemIsMovable);
+    scene->setBackgroundBrush(QColor(0,0,255,127));
 
     ball_2 = scene->addEllipse(rectBaLL_2, outlinePen, blueBrush);
     ball_2->setFlag(QGraphicsItem::ItemIsMovable);
@@ -79,6 +80,16 @@ void MainWindow::processData()
     ball_1_mass = ui->massBox->text().toFloat();
     ball_1_height = ui->heightBox->text().toFloat();
 
+    switch(ui->comboBox->currentIndex()){
+    case 0: ball_1_COR = COR_golf_ball; break;
+    case 1: ball_1_COR = COR_tennis_ball; break;
+    case 2: ball_1_COR = COR_billiard_ball; break;
+    case 3: ball_1_COR = COR_wooden_ball; break;
+    case 4: ball_1_COR = COR_steel_ball; break;
+    case 5: ball_1_COR = COR_rubber_ball; break;
+    case 6: ball_1_COR = COR_wooden_ball; break;
+    }
+
     ball_1_current_height = ball_1_height;
 
     isGoingToFall = true;
@@ -87,10 +98,8 @@ void MainWindow::processData()
     // create a timer to check every ms, the state of the ball
     statusTimer = new QTimer(this);
     QObject::connect(statusTimer,SIGNAL(timeout()),this,SLOT(checkBallStatus()));
-    statusTimer->setInterval(1);
+    statusTimer->setInterval(100);
     statusTimer->start();
-
-
 }
 
 void MainWindow::advance()
@@ -104,7 +113,6 @@ void MainWindow::advance()
     {
         ball_1_velocityYBeforeImpact = sqrt( 2*ball_1_gravity * ball_1_height);
         std::cout << ball_1_velocityYBeforeImpact << std::endl;
-        ball_1_COR = 0.5;
         ball_1_velocityYAfterImpact = ball_1_COR * ball_1_velocityYBeforeImpact;
         std::cout << "WHATS GOING ON ?" << std::endl;
         ball_1_velocityY = -std::abs(ball_1_velocityY);
@@ -121,6 +129,7 @@ void MainWindow::resetScene()
     ball_1_velocityX = 0.0;
     ball_1_velocityY = 0.0;
     ball_1_partialTimeElapsed = 0.0;
+    //ball_1_current_height = ui->heightBox->text().toFloat();
     drawScene();
     heightBetweenBallFloor = floor->y() - ball_1->y() - ball_1->boundingRect().height();
 }
@@ -164,12 +173,12 @@ void MainWindow::checkBallStatus()
 
         ball_1_velocityYBeforeImpact = 0 + ball_1_gravity * time_to_fall;
         cout << "vel before: " << ball_1_velocityYBeforeImpact << endl;
-        ball_1_COR = 0.85;
+        ball_1_COR = COR_golf_ball;
         ball_1_velocityYAfterImpact = ball_1_COR * ball_1_velocityYBeforeImpact;
 
         time_to_go_up = timeGoingUp(ball_1_velocityYAfterImpact, ball_1_gravity)/2;
 
-        if(time_to_go_up < 0.01){
+        if(time_to_go_up < 0.1){
             QObject::disconnect(statusTimer,SIGNAL(timeout()),this,SLOT(checkBallStatus()));
         }
 
