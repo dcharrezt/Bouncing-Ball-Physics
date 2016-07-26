@@ -51,11 +51,11 @@
       <x>330</x>
       <y>0</y>
       <width>241</width>
-      <height>271</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -65,7 +65,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>10</y>
+        <y>20</y>
         <width>59</width>
         <height>14</height>
        </rect>
@@ -78,7 +78,7 @@
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>40</y>
+        <y>50</y>
         <width>113</width>
         <height>22</height>
        </rect>
@@ -91,7 +91,7 @@
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>10</y>
+        <y>20</y>
         <width>113</width>
         <height>22</height>
        </rect>
@@ -100,24 +100,11 @@
        <string>9.78</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="runButton">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>140</y>
-        <width>80</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Run</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>70</y>
+        <y>80</y>
         <width>59</width>
         <height>14</height>
        </rect>
@@ -126,24 +113,11 @@
        <string>Height</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="clearButton">
-      <property name="geometry">
-       <rect>
-        <x>130</x>
-        <y>140</y>
-        <width>80</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Clear</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>40</y>
+        <y>50</y>
         <width>59</width>
         <height>14</height>
        </rect>
@@ -152,24 +126,11 @@
        <string>Mass</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="resetButton">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>190</y>
-        <width>80</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Reset</string>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="heightBox">
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>70</y>
+        <y>80</y>
         <width>113</width>
         <height>22</height>
        </rect>
@@ -182,7 +143,7 @@
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>100</y>
+        <y>110</y>
         <width>111</width>
         <height>22</height>
        </rect>
@@ -227,7 +188,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>100</y>
+        <y>110</y>
         <width>59</width>
         <height>14</height>
        </rect>
@@ -241,7 +202,182 @@
      <attribute name="title">
       <string>Ball 2</string>
      </attribute>
+     <widget class="QLineEdit" name="heightBox_2">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>80</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>10.0</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="gravityBox_2">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>20</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>9.78</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>80</y>
+        <width>59</width>
+        <height>14</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Height</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="massBox_2">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>50</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>5.0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>59</width>
+        <height>14</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gravity</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>59</width>
+        <height>14</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Mass</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_2">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>110</y>
+        <width>111</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Golf Ball</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Tennis Ball</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Billiard Ball</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wooden Ball</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Steel Ball</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Rubber Ball</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Plastic Ball</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>110</y>
+        <width>59</width>
+        <height>14</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>C.O.R.</string>
+      </property>
+     </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="clearButton">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>190</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="runButton">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>190</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="resetButton">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>240</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

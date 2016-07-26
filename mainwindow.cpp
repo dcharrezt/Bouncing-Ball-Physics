@@ -9,8 +9,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
+
     timer = new QTimer(this);
     timer->setInterval(10);
+
+    timer_2 = new QTimer(this);
+    timer_2->setInterval(10);
 
     QObject::connect(ui->runButton, SIGNAL(clicked()),this, SLOT(processData()) );
     QObject::connect(ui->resetButton, SIGNAL(clicked()), this, SLOT(resetScene()));
@@ -68,6 +72,16 @@ FF MainWindow::timeGoingDown(FF height, FF gravity)
     return sqrt( (2*height)/gravity );
 }
 
+FF MainWindow::kineticEnergy()
+{
+    //return 0.5 * mass * vel * vel;
+}
+
+FF MainWindow::potencialEnergy()
+{
+    //return mass * grav * h+3;
+}
+
 void MainWindow::doTheFuckingMath()
 {
     std::cout <<  ui->massBox->text().toInt() << std::endl;
@@ -75,7 +89,7 @@ void MainWindow::doTheFuckingMath()
 
 void MainWindow::processData()
 {
-    // retrieve data from buttons
+    // retrieve data from buttons for ball 1
     ball_1_gravity = ui->gravityBox->text().toFloat();
     ball_1_mass = ui->massBox->text().toFloat();
     ball_1_height = ui->heightBox->text().toFloat();
@@ -95,11 +109,37 @@ void MainWindow::processData()
     isGoingToFall = true;
     isMoving = false;
 
+    // retrieve data from buttons for ball 2
+    ball_2_gravity = ui->gravityBox_2->text().toFloat();
+    ball_2_mass = ui->massBox_2->text().toFloat();
+    ball_2_height = ui->heightBox_2->text().toFloat();
+
+    switch(ui->comboBox_2->currentIndex()){
+    case 0: ball_2_COR = COR_golf_ball; break;
+    case 1: ball_2_COR = COR_tennis_ball; break;
+    case 2: ball_2_COR = COR_billiard_ball; break;
+    case 3: ball_2_COR = COR_wooden_ball; break;
+    case 4: ball_2_COR = COR_steel_ball; break;
+    case 5: ball_2_COR = COR_rubber_ball; break;
+    case 6: ball_2_COR = COR_wooden_ball; break;
+    }
+
+    ball_2_current_height = ball_2_height;
+
+    isGoingToFall_2 = true;
+    isMoving_2 = false;
+
     // create a timer to check every ms, the state of the ball
     statusTimer = new QTimer(this);
-    QObject::connect(statusTimer,SIGNAL(timeout()),this,SLOT(checkBallStatus()));
     statusTimer->setInterval(100);
+    QObject::connect(statusTimer,SIGNAL(timeout()),this,SLOT(checkBallStatus()));
     statusTimer->start();
+
+
+    statusTimer_2 = new QTimer(this);
+    statusTimer_2->setInterval(100);
+    QObject::connect(statusTimer_2,SIGNAL(timeout()),this,SLOT(checkBallStatus_2()));
+    statusTimer_2->start();
 }
 
 void MainWindow::advance()
@@ -125,13 +165,15 @@ void MainWindow::advance()
 void MainWindow::resetScene()
 {
     scene->clear();
-    QObject::disconnect(timer,SIGNAL(timeout()),this,SLOT(freeFalling()));
+    //QObject::disconnect(timer,SIGNAL(timeout()),this,SLOT(freeFalling()));
     ball_1_velocityX = 0.0;
     ball_1_velocityY = 0.0;
     ball_1_partialTimeElapsed = 0.0;
-    //ball_1_current_height = ui->heightBox->text().toFloat();
+
+    ball_2_velocityY = 0.0;
+    ball_2_partialTimeElapsed = 0.0;
+
     drawScene();
-    heightBetweenBallFloor = floor->y() - ball_1->y() - ball_1->boundingRect().height();
 }
 
 void MainWindow::freeFalling()
@@ -172,8 +214,6 @@ void MainWindow::checkBallStatus()
         timer->start();
 
         ball_1_velocityYBeforeImpact = 0 + ball_1_gravity * time_to_fall;
-        cout << "vel before: " << ball_1_velocityYBeforeImpact << endl;
-        ball_1_COR = COR_golf_ball;
         ball_1_velocityYAfterImpact = ball_1_COR * ball_1_velocityYBeforeImpact;
 
         time_to_go_up = timeGoingUp(ball_1_velocityYAfterImpact, ball_1_gravity)/2;
@@ -218,4 +258,76 @@ void MainWindow::disconnectBounce()
     isGoingToFall = true;
     isGoingToBounce = false;
     isMoving = false;
+}
+
+void MainWindow::freeFalling_2()
+{
+    ball_2_partialTimeElapsed += 0.01; // miliseconds
+
+    ball_2_velocityY = (ball_2_current_height * 140 / ball_2_height) * 0.01 /time_to_fall_2;
+    ball_2->setPos(ball_2->x(), ball_2->y() + ball_2_velocityY);
+}
+
+void MainWindow::bouncingUp_2()
+{
+    ball_2->setPos(ball_2->x(), ball_2->y() - ball_2_velocityY);
+}
+
+void MainWindow::checkBallStatus_2()
+{
+    if( isGoingToFall_2 && !isMoving_2)
+    {
+        ball_2_partialTimeElapsed = 0.0;
+        isMoving_2 = true;
+
+        QObject::connect(timer_2,SIGNAL(timeout()),this,SLOT(freeFalling_2()));
+
+        timer_2->start();
+        time_to_fall_2 = timeGoingDown(ball_2_current_height, ball_2_gravity);
+        QTimer::singleShot(time_to_fall_2*1000,this,SLOT(disconnectFall_2()));
+    }
+
+    if( isGoingToBounce_2 && !isMoving_2 )
+    {
+        ball_2_partialTimeElapsed = 0.0;
+        isMoving_2 = true;
+        QObject::connect(timer_2,SIGNAL(timeout()),this,SLOT(bouncingUp_2()));
+        timer_2->start();
+
+        ball_2_velocityYBeforeImpact = 0 + ball_2_gravity * time_to_fall_2;        ball_2_velocityYAfterImpact = ball_2_COR * ball_2_velocityYBeforeImpact;
+
+        time_to_go_up_2 = timeGoingUp(ball_2_velocityYAfterImpact, ball_2_gravity)/2;
+
+        if(time_to_go_up_2 < 0.1){
+            QObject::disconnect(statusTimer_2,SIGNAL(timeout()),this,SLOT(checkBallStatus_2()));
+        }
+
+        height_till_top_2 = ball_2_velocityYAfterImpact * ball_2_velocityYAfterImpact / (2*ball_2_gravity);
+        ball_2_current_height = height_till_top_2;
+        pixels_till_top_2 = 140*height_till_top_2 / ball_2_height;
+
+        ball_2_velocityY = pixels_till_top_2 * 0.01 / time_to_go_up_2;
+
+        QTimer::singleShot(time_to_go_up_2*1000,this,SLOT(disconnectBounce_2()));
+    }
+}
+
+void MainWindow::disconnectFall_2()
+{
+    QObject::disconnect(timer_2,SIGNAL(timeout()),this,SLOT(freeFalling_2()));
+    timer_2->stop();
+
+    isGoingToFall_2 = false;
+    isGoingToBounce_2 = true;
+    isMoving_2 = false;
+}
+
+void MainWindow::disconnectBounce_2()
+{
+    QObject::disconnect(timer_2,SIGNAL(timeout()),this,SLOT(bouncingUp_2()));
+    timer_2->stop();
+
+    isGoingToFall_2 = true;
+    isGoingToBounce_2 = false;
+    isMoving_2 = false;
 }
